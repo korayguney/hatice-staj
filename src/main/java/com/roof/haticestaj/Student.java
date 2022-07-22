@@ -1,9 +1,8 @@
 package com.roof.haticestaj;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
 
 // POJO (Plain Old Java Object)
 @Entity
@@ -14,13 +13,15 @@ public class Student {
     private int id;
     private String fullname;
     private int studentId;
-    private String school;
+
+    @ManyToOne
+    private School school;
 
     // constuctor
-    public Student(String fullname, int studentId, String school) {
+    public Student(String fullname, int studentId) {
         this.fullname = fullname;
         this.studentId = studentId;
-        this.school = school;
+
     }
 
     public Student(){}
@@ -50,11 +51,11 @@ public class Student {
         this.studentId = studentId;
     }
 
-    public String getSchool() {
+    public School getSchool() {
         return school;
     }
 
-    public void setSchool(String school) {
+    public void setSchool(School school) {
         this.school = school;
     }
 
@@ -63,7 +64,6 @@ public class Student {
         return "Student{" +
                 "fullname='" + fullname + '\'' +
                 ", studentId=" + studentId +
-                ", school='" + school + '\'' +
                 '}';
     }
 }

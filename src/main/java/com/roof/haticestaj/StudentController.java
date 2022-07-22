@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,26 @@ public class StudentController {
 
     // dependency injection (DI) (IoC)
     @Autowired
-    private StudentRepository repository;
+    private StudentRepository studentRepository;
+    @Autowired
+    private SchoolRepository schoolRepository;
+
+    @PostConstruct
+    public void init() {
+        Student student1 = new Student("Koray Güney", 123);
+        Student student2 = new Student("Hatice Çağlar", 124);
+
+        School school1 = new School("FSM Universitesi", "Halic/İstanbul", 212255555L);
+        student1.setSchool(school1);
+        student2.setSchool(school1);
+
+        schoolRepository.save(school1);
+        studentRepository.save(student1);
+        studentRepository.save(student2);
+
+        System.out.println("All students saved to DB...");
+
+    }
 
     List<Student> students = new ArrayList<>();
 
@@ -28,13 +48,13 @@ public class StudentController {
         //students.add(student3);
         //return students;
 
-        return repository.findAll();
+        return studentRepository.findAll();
 
     }
 
     @PostMapping("/students")
     public Student saveStudent(@RequestBody Student student) {
-        return repository.save(student);
+        return studentRepository.save(student);
        // students.add(student);
     }
 }
